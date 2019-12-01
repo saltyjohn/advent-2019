@@ -67,8 +67,8 @@ def total_fuel(input, func):
 
 # time=0.0
 part_1_answer = total_fuel(input, func=basic_fuel_estimator)
-print('Part 1:', part_1_answer)  # 3394032
+print(f'Part 1: {part_1_answer}')  # 3394032
 
 # time=0.0009982585906982422
 part_2_answer = total_fuel(input, func=adv_fuel_estimator)
-print('Part 2:', part_2_answer)  # 5088176
+print(f'Part 2: {part_2_answer}')  # 5088176
