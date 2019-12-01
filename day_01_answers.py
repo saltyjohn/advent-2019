@@ -39,7 +39,7 @@ your spacecraft?
 Part 2: Same deal, but add fuel for fuel-mass
 """
 
-from inputs import day_01_input as input
+from day_01_inputs import input
 import utils
 
 
