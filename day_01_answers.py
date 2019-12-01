@@ -11,8 +11,8 @@ def adv_fuel_estimator(mass, total=0):
     total += added_fuel
 
     # only a fuel-mass of 9 or greater will contribute to more fuel:
-    #   --> floor(9 / 3) - 2 = 1
-    #   --> floor(8 / 3) - 2 = 0
+    #   --> (9 // 3) - 2 = 1
+    #   --> (8 // 3) - 2 = 0
     if added_fuel > 8:
         return adv_fuel_estimator(mass=added_fuel, total=total)
 
