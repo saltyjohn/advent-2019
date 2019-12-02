@@ -2,7 +2,7 @@ from day_02_inputs import intcode as ic
 from day_02_inputs import tests
 
 
-def read_intcode(ic, add_fix=False, fix_a=12, fix_b=2):
+def update_intcode(ic, add_fix=False, fix_a=12, fix_b=2):
     lic = ic.copy()  # local intcode
 
     # Restore values in position 1 and 2
@@ -30,7 +30,10 @@ def read_intcode(ic, add_fix=False, fix_a=12, fix_b=2):
 def find_ic_target(target=19690720):
     for a in range(100):
         for b in range(100):
-            fixed_opline = read_intcode(ic=ic, add_fix=True, fix_a=a, fix_b=b)
+            fixed_opline = update_intcode(ic=ic,
+                                          add_fix=True,
+                                          fix_a=a,
+                                          fix_b=b)
 
             if fixed_opline[0] == target:
                 return 100 * a + b
@@ -38,14 +41,14 @@ def find_ic_target(target=19690720):
     return "Target not found."
 
 
-def test_read_intcode():
+def test_update_intcode():
     for test_ic, answer in tests:
-        assert read_intcode(test_ic) == answer
+        assert update_intcode(test_ic) == answer
 
 
-test_read_intcode()
-fixed_opline = read_intcode(ic=ic, add_fix=True)
-print(fixed_opline[0])  # 310187
+test_update_intcode()
+fixed_intcode = update_intcode(ic=ic, add_fix=True)
+print(fixed_intcode[0])  # 310187
 print(find_ic_target())  # 8444
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
