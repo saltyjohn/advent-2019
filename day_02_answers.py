@@ -1,6 +1,5 @@
 from day_02_inputs import intcode as ic
 from day_02_inputs import tests
-import utils
 
 
 def read_intcode(ic, add_fix=False, fix_vals=(12, 2)):
@@ -26,7 +25,6 @@ def read_intcode(ic, add_fix=False, fix_vals=(12, 2)):
     return new_ic
 
 
-@utils.timing
 def find_ic_target(target=19690720):
     for j in range(100):
         for k in range(100):

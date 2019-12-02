@@ -1,6 +1,7 @@
 {
     "python.pythonPath": "c:\\Users\\johnr\\Desktop\\code\\advent_2019\\venv\\Scripts\\python.exe",
     "python.formatting.provider": "yapf",
+    // "python.formatting.blackArgs": ["--line-length", "80", "--fast"],
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true
