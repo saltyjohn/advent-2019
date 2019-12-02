@@ -1,4 +1,5 @@
-# Like a derp, I forgot that 'input' was function in python
+# Sorry if the formatting is little wonky, I let black and yapf take a swing
+# at these and it's been all over the place...
 intcode = [
     1, 0, 0, 3, 1, 1, 2, 3, 1, 3, 4, 3, 1, 5, 0, 3, 2, 1, 10, 19, 1, 19, 5, 23,
     2, 23, 9, 27, 1, 5, 27, 31, 1, 9, 31, 35, 1, 35, 10, 39, 2, 13, 39, 43, 1,
