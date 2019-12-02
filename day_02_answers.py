@@ -5,7 +5,7 @@ from day_02_inputs import tests
 def update_intcode(ic, add_fix=False, fix_a=12, fix_b=2):
     lic = ic.copy()  # local intcode
 
-    # Restore values in position 1 and 2
+    # Restore values in positions 1 and 2
     if add_fix:
         lic[1] = fix_a
         lic[2] = fix_b
