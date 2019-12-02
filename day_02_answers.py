@@ -2,35 +2,40 @@ from day_02_inputs import intcode as ic
 from day_02_inputs import tests
 
 
-def read_intcode(ic, add_fix=False, fix_vals=(12, 2)):
-    new_ic = ic.copy()
-    if add_fix:
-        a, b = fix_vals
-        new_ic[1] = a
-        new_ic[2] = b
+def read_intcode(ic, add_fix=False, fix_a=12, fix_b=2):
+    lic = ic.copy()  # local intcode
 
-    for i in range(0, len(new_ic), 4):
-        if new_ic[i] == 99:
+    # Restore values in position 1 and 2
+    if add_fix:
+        lic[1] = fix_a
+        lic[2] = fix_b
+
+    # Loop through intcode by opcode positions
+    for i in range(0, len(lic), 4):
+        if lic[i] == 99:
             break
 
-        idx_a = new_ic[i + 1]
-        idx_b = new_ic[i + 2]
-        update_idx = new_ic[i + 3]
+        idx_a = lic[i + 1]
+        idx_b = lic[i + 2]
+        update_idx = lic[i + 3]
 
-        if new_ic[i] == 1:
-            new_ic[update_idx] = new_ic[idx_a] + new_ic[idx_b]
-        elif new_ic[i] == 2:
-            new_ic[update_idx] = new_ic[idx_a] * new_ic[idx_b]
+        if lic[i] == 1:
+            lic[update_idx] = lic[idx_a] + lic[idx_b]
+        elif lic[i] == 2:
+            lic[update_idx] = lic[idx_a] * lic[idx_b]
 
-    return new_ic
+    return lic
 
 
 def find_ic_target(target=19690720):
-    for j in range(100):
-        for k in range(100):
-            fixed_opline = read_intcode(ic=ic, add_fix=True, fix_vals=(j, k))
+    for a in range(100):
+        for b in range(100):
+            fixed_opline = read_intcode(ic=ic, add_fix=True, fix_a=a, fix_b=b)
+
             if fixed_opline[0] == target:
-                return 100 * j + k
+                return 100 * a + b
+
+    return "Target not found."
 
 
 def test_read_intcode():
