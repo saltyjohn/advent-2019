@@ -34,7 +34,6 @@ def find_ic_target(target=19690720):
                                           add_fix=True,
                                           fix_a=a,
                                           fix_b=b)
-
             if fixed_opline[0] == target:
                 return 100 * a + b
 
@@ -50,54 +49,3 @@ test_update_intcode()
 fixed_intcode = update_intcode(ic=ic, add_fix=True)
 print(fixed_intcode[0])  # 310187
 print(find_ic_target())  # 8444
-# ------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------
-"""
-# --- Part 1, Attempt 1 ---
-def read_intcode(inp, pointer=0, add_fix=False):
-    if add_fix:
-        inp[1] = 12
-        inp[2] = 2
-
-    # for i in range(len(inp), step=4):
-    if inp[pointer] == 99:
-        return inp
-
-    pos_a = inp[pointer + 1]
-    pos_b = inp[pointer + 2]
-    update_pos = inp[pointer + 3]
-
-    if inp[pointer] == 1:
-        inp[update_pos] = inp[pos_a] + inp[pos_b]
-    elif inp[pointer] == 2:
-        inp[update_pos] = inp[pos_a] * inp[pos_b]
-    pointer += 4
-
-    return read_intcode(inp, pointer=pointer)
-
-
-def test_read_intcode():
-    tests = [([1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40,
-               50], [3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50]),
-             ([1, 0, 0, 0, 99], [2, 0, 0, 0, 99]),
-             ([2, 3, 0, 3, 99], [2, 3, 0, 6, 99]),
-             ([2, 4, 4, 5, 99, 0], [2, 4, 4, 5, 99, 9801]),
-             ([1, 1, 1, 4, 99, 5, 6, 0, 99], [30, 1, 1, 4, 2, 5, 6, 0, 99])]
-
-    for i, answer in tests:
-        print(read_intcode(i) == answer)
-
-
-
-def find_ic_target(target=19690720):
-    for j in range(100):
-        for k in range(100):
-            fixed_opline = read_intcode(ic=ic, add_fix=True, fix_vals=(j, k))
-            if fixed_opline[0] == target:
-                return 100 * j + k
-
-
-fixed_opline = read_intcode(inp=inp, add_fix=True)
-print(fixed_opline[0])
-print(find_ic_target())
-"""
