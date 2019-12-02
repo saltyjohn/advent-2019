@@ -30,11 +30,8 @@ def update_intcode(ic, add_fix=False, fix_a=12, fix_b=2):
 def find_ic_target(target=19690720):
     for a in range(100):
         for b in range(100):
-            fixed_opline = update_intcode(ic=ic,
-                                          add_fix=True,
-                                          fix_a=a,
-                                          fix_b=b)
-            if fixed_opline[0] == target:
+            lic = update_intcode(ic=ic, add_fix=True, fix_a=a, fix_b=b)
+            if lic[0] == target:
                 return 100 * a + b
 
     return "Target not found."
