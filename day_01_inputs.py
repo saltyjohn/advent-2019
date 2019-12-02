@@ -1,6 +1,6 @@
 # it took about a minute to organize the raw input
 #   into a nice list with VSCode
-input = [
+vals = [
     141496,
     50729,
     52916,

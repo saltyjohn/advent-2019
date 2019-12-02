@@ -1,4 +1,4 @@
-from day_01_inputs import input
+from day_01_inputs import vals
 import utils
 
 
@@ -20,14 +20,14 @@ def adv_fuel_estimator(mass, total=0):
 
 
 @utils.timing
-def total_fuel(input, func):
-    return sum([func(i) for i in input])
+def total_fuel(vals, func):
+    return sum([func(i) for i in vals])
 
 
 # time=0.0
-part_1_answer = total_fuel(input, func=basic_fuel_estimator)
+part_1_answer = total_fuel(vals, func=basic_fuel_estimator)
 print(f'Part 1: {part_1_answer}')  # 3394032
 
 # time=0.0009982585906982422
-part_2_answer = total_fuel(input, func=adv_fuel_estimator)
+part_2_answer = total_fuel(vals, func=adv_fuel_estimator)
 print(f'Part 2: {part_2_answer}')  # 5088176
