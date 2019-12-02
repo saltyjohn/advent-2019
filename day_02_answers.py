@@ -1,4 +1,5 @@
 from day_02_inputs import intcode as ic
+from day_02_inputs import tests
 import utils
 
 
@@ -13,14 +14,14 @@ def read_intcode(ic, add_fix=False, fix_vals=(12, 2)):
         if new_ic[i] == 99:
             break
 
-        pos_a = new_ic[i + 1]
-        pos_b = new_ic[i + 2]
-        update_pos = new_ic[i + 3]
+        idx_a = new_ic[i + 1]
+        idx_b = new_ic[i + 2]
+        update_idx = new_ic[i + 3]
 
         if new_ic[i] == 1:
-            new_ic[update_pos] = new_ic[pos_a] + new_ic[pos_b]
+            new_ic[update_idx] = new_ic[idx_a] + new_ic[idx_b]
         elif new_ic[i] == 2:
-            new_ic[update_pos] = new_ic[pos_a] * new_ic[pos_b]
+            new_ic[update_idx] = new_ic[idx_a] * new_ic[idx_b]
 
     return new_ic
 
@@ -35,24 +36,18 @@ def find_ic_target(target=19690720):
 
 
 def test_read_intcode():
-    tests = [([1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40,
-               50], [3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50]),
-             ([1, 0, 0, 0, 99], [2, 0, 0, 0, 99]),
-             ([2, 3, 0, 3, 99], [2, 3, 0, 6, 99]),
-             ([2, 4, 4, 5, 99, 0], [2, 4, 4, 5, 99, 9801]),
-             ([1, 1, 1, 4, 99, 5, 6, 0, 99], [30, 1, 1, 4, 2, 5, 6, 0, 99])]
-
     for test_ic, answer in tests:
-        print(read_intcode(test_ic) == answer)
+        assert read_intcode(test_ic) == answer
 
 
 test_read_intcode()
-
 fixed_opline = read_intcode(ic=ic, add_fix=True)
-print(fixed_opline[0])
-print(find_ic_target())
+print(fixed_opline[0])  # 310187
+print(find_ic_target())  # 8444
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """
---- Part 1 Original ---
+# --- Part 1, Attempt 1 ---
 def read_intcode(inp, pointer=0, add_fix=False):
     if add_fix:
         inp[1] = 12
