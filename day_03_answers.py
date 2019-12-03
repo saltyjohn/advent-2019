@@ -1,5 +1,8 @@
-# from day_03_inputs import vals
+from day_03_inputs import directions
 
 
-def main():
+def traverse(diirections):
     pass
+
+
+print(traverse(directions))
