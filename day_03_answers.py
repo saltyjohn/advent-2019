@@ -141,13 +141,11 @@ def test_traverse_wires():
 def test_traverse_wires_2():
     for test, answer in traverse_tests_2:
         wire_a, wire_b = test
-        print('Non manhattan:',
-              traverse_wires(wire_a, wire_b, return_manhattan=False), answer)
-        # assert traverse_wires(wire_a, wire_b, return_manhattan=False) == answer
+        assert traverse_wires(wire_a, wire_b, return_manhattan=False) == answer
 
 
 wire_a, wire_b = wires
-# test_traverse_wires()
+test_traverse_wires()
 test_traverse_wires_2()
-# print(traverse_wires(wire_a, wire_b))  # 2180
-pprint(traverse_wires(wire_a, wire_b, return_manhattan=False))
+print(traverse_wires(wire_a, wire_b))  # 2180
+print(traverse_wires(wire_a, wire_b, return_manhattan=False))
