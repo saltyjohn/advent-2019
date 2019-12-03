@@ -22,10 +22,10 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
                 intersections.append(tuple(coords))
 
                 # for step calculation distance
-                pre_intersections = path_a[idx_a], path_b[idx_b]
+                pre_intersection_coords = path_a[idx_a], path_b[idx_b]
                 path_steps = (idx_a, idx_b)
                 detailed_intersections.append(
-                    (path_steps, (pre_intersections), coords))
+                    (path_steps, pre_intersection_coords, coords))
 
     if return_manhattan:
         return min([sum([abs(x), abs(y)]) for x, y in intersections])
@@ -53,6 +53,8 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
 
 def calculate_steps(wire, steps, pre_coords, coords_intersection):
     total = 0
+
+    # add the integer values from the input directions
     for idx in range(0, steps):
         direction = wire[idx]
         total += int(direction[1:])
@@ -70,6 +72,8 @@ def calculate_steps(wire, steps, pre_coords, coords_intersection):
 
 def extract_path_from_wire(wire, origin=[0, 0]):
     path = [origin]
+
+    # append coordinates for each direction in inputs
     for direction in wire:
         new_coords = get_next_coords(path[-1], direction)
         path.append(new_coords)
@@ -94,6 +98,7 @@ def check_for_intersection(line_a, line_b):
     exists = False
     coords = [None, None]
 
+    # sp = static position, r = range
     sp_a, ra_start, ra_end = static_pos_and_range(*line_a)
     sp_b, rb_start, rb_end = static_pos_and_range(*line_b)
 
@@ -104,16 +109,17 @@ def check_for_intersection(line_a, line_b):
     static_val_a = line_a[0][sp_a]
     static_val_b = line_b[0][sp_b]
 
-    # check if static values are within of other's range
+    # check if static value of line are within the other line's range
     a_in_b_range = rb_start <= static_val_a <= rb_end
     b_in_a_range = ra_start <= static_val_b <= ra_end
 
     # if both are true, the line intersects at the two static values
     exists = a_in_b_range and b_in_a_range
+    # place the values with the relative static position
     coords[sp_a] = static_val_a
     coords[sp_b] = static_val_b
 
-    # the origin does not count as and intersection
+    # the origin does not count as an intersection
     if coords == [0, 0]:
         exists = False
 
@@ -121,6 +127,7 @@ def check_for_intersection(line_a, line_b):
 
 
 def static_pos_and_range(coord_a, coord_b):
+    # set static and range list positions
     if coord_a[0] == coord_b[0]:
         static_pos, r_pos = 0, 1
     elif coord_a[1] == coord_b[1]:
@@ -148,4 +155,4 @@ wire_a, wire_b = wires
 test_traverse_wires()
 test_traverse_wires_2()
 print(traverse_wires(wire_a, wire_b))  # 2180
-print(traverse_wires(wire_a, wire_b, return_manhattan=False))
+print(traverse_wires(wire_a, wire_b, return_manhattan=False))  # 112316
