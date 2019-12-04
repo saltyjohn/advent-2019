@@ -132,12 +132,14 @@ def static_pos_and_range(coord_a, coord_b):
     # set static and range list positions
     if coord_a[0] == coord_b[0]:
         static_pos, r_pos = 0, 1
-    elif coord_a[1] == coord_b[1]:
+    elif coord_a[1] == coord_b[1]:  # this could probably be 'else'
         static_pos, r_pos = 1, 0
 
+    # set range start and end values
     r = [coord_a[r_pos], coord_b[r_pos]]
     r_start = min(r)
     r_end = max(r)
+
     return static_pos, r_start, r_end
 
 
