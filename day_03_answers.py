@@ -1,8 +1,8 @@
-# import utils
+import utils
 from day_03_inputs import wires, traverse_tests, traverse_tests_2
 
 
-# @utils.timer
+@utils.timer
 def traverse_wires(wire_a, wire_b, return_manhattan=True):
     # extract path (in x, y coordinates) from wires
     path_a = extract_path_from_wire(wire_a)
@@ -22,27 +22,25 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
 
             if exists:
                 if return_manhattan:
-                    # for manhattan distance
                     intersections.append(tuple(coords))
                 else:
-                    # for steps distance
-                    pre_intersection_coords = path_a[idx_a], path_b[idx_b]
                     path_steps = (idx_a, idx_b)
+                    pre_intersection_coords = (path_a[idx_a], path_b[idx_b])
                     detailed_intersections.append(
                         (path_steps, pre_intersection_coords, coords))
 
     if return_manhattan:
         return min([sum([abs(x), abs(y)]) for x, y in intersections])
     else:
-        # calculate total steps
         least_steps = None
 
-        for steps, pres, coords in detailed_intersections:
-            step_a, step_b = steps
-            pre_a, pre_b = pres
+        # int_coords, int as in abbr for intersection
+        for steps, pres, int_coords in detailed_intersections:
+            step_a, step_b = steps  # direction-steps up to intersection
+            pre_a, pre_b = pres  # coordinates before intersection
 
-            wire_a_steps = calculate_steps(wire_a, step_a, pre_a, coords)
-            wire_b_steps = calculate_steps(wire_b, step_b, pre_b, coords)
+            wire_a_steps = count_steps(wire_a, step_a, pre_a, int_coords)
+            wire_b_steps = count_steps(wire_b, step_b, pre_b, int_coords)
 
             total_steps = wire_a_steps + wire_b_steps
 
@@ -54,18 +52,18 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
         return least_steps
 
 
-def calculate_steps(wire, steps, pre_coords, coords_intersection):
+def count_steps(wire, steps, pre_coords, int_coords):
     total = 0
 
-    # add the integer values from the input directions
+    # add the integer values from the wire-directions
     for idx in range(0, steps):
         direction = wire[idx]
         total += int(direction[1:])
 
     x1 = pre_coords[0]
     y1 = pre_coords[1]
-    x2 = coords_intersection[0]
-    y2 = coords_intersection[1]
+    x2 = int_coords[0]
+    y2 = int_coords[1]
 
     # add the difference between the pre-intersection coords and
     #   intersection coords
@@ -78,14 +76,14 @@ def extract_path_from_wire(wire, origin=[0, 0]):
 
     # append coordinates for each direction in inputs
     for direction in wire:
-        new_coords = get_next_coords(path[-1], direction)
-        path.append(new_coords)
+        next_coords = get_next_coords(path[-1], direction)
+        path.append(next_coords)
 
     return path
 
 
 def get_next_coords(coords, direction):
-    coords = coords.copy()
+    next_coords = coords.copy()
     direction, distance = direction[0], int(direction[1:])
 
     # x-axis [0] / y-axis [1]
@@ -93,8 +91,8 @@ def get_next_coords(coords, direction):
     # positive / negative axis movement
     multiplier = 1 if direction in {"U", "R"} else -1
 
-    coords[change_pos] = coords[change_pos] + (distance * multiplier)
-    return coords
+    next_coords[change_pos] = next_coords[change_pos] + (distance * multiplier)
+    return next_coords
 
 
 def check_for_intersection(line_a, line_b):
@@ -145,21 +143,25 @@ def static_pos_and_range(coord_a, coord_b):
 
 
 def test_traverse_wires():
+    print("---Testing manhattan distance...---")
     for test, answer in traverse_tests:
         wire_a, wire_b = test
         assert traverse_wires(wire_a, wire_b) == answer
+    print("---Test over---\n")
 
 
 def test_traverse_wires_2():
+    print("---Testing steps distance...---")
     for test, answer in traverse_tests_2:
         wire_a, wire_b = test
         assert traverse_wires(wire_a, wire_b, return_manhattan=False) == answer
+    print("---Test over---\n")
 
 
-wire_a, wire_b = wires
 test_traverse_wires()
 test_traverse_wires_2()
 
+wire_a, wire_b = wires
 # Part 1 Time: ~0.17 seconds
 print(traverse_wires(wire_a, wire_b))  # 2180
 # Part 2 Time: ~0.14 seconds
