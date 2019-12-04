@@ -1,6 +1,8 @@
 from day_03_inputs import wires, traverse_tests, traverse_tests_2
+import utils
 
 
+@utils.timer
 def traverse_wires(wire_a, wire_b, return_manhattan=True):
     # extract path (in x, y coordinates) from wires
     path_a = extract_path_from_wire(wire_a)
@@ -85,7 +87,7 @@ def get_next_coords(coords, direction):
     coords = coords.copy()
     direction, distance = direction[0], int(direction[1:])
 
-    # x-axis / y-axis
+    # x-axis [0] / y-axis [1]
     change_pos = 0 if direction in {"R", "L"} else 1
     # positive / negative axis movement
     multiplier = 1 if direction in {"U", "R"} else -1
@@ -152,7 +154,10 @@ def test_traverse_wires_2():
 
 
 wire_a, wire_b = wires
-test_traverse_wires()
-test_traverse_wires_2()
+# test_traverse_wires()
+# test_traverse_wires_2()
+
+# Part 1 Time: ~0.17 seconds
 print(traverse_wires(wire_a, wire_b))  # 2180
+# Part 2 Time: ~0.14 seconds
 print(traverse_wires(wire_a, wire_b, return_manhattan=False))  # 112316
