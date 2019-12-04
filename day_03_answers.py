@@ -111,7 +111,7 @@ def check_for_intersection(line_a, line_b):
     static_val_a = line_a[0][sp_a]
     static_val_b = line_b[0][sp_b]
 
-    # check if static value of line are within the other line's range
+    # check if static value of line is within the other line's range
     a_in_b_range = rb_start <= static_val_a <= rb_end
     b_in_a_range = ra_start <= static_val_b <= ra_end
 
