@@ -1,14 +1,14 @@
+# import utils
 from day_03_inputs import wires, traverse_tests, traverse_tests_2
-import utils
 
 
-@utils.timer
+# @utils.timer
 def traverse_wires(wire_a, wire_b, return_manhattan=True):
     # extract path (in x, y coordinates) from wires
     path_a = extract_path_from_wire(wire_a)
     path_b = extract_path_from_wire(wire_b)
 
-    intersections = []  # for manhattan distance
+    intersections = []  # for manhattan distance]
     detailed_intersections = []  # for steps total
 
     # check each line segment from wire_a with all segments from wire_b
@@ -19,21 +19,22 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
             line_b = [path_b[idx_b], path_b[idx_b + 1]]
 
             exists, coords = check_for_intersection(line_a, line_b)
-            if exists:
-                # for manhattan distance
-                intersections.append(tuple(coords))
 
-                # for step calculation distance
-                pre_intersection_coords = path_a[idx_a], path_b[idx_b]
-                path_steps = (idx_a, idx_b)
-                detailed_intersections.append(
-                    (path_steps, pre_intersection_coords, coords))
+            if exists:
+                if return_manhattan:
+                    # for manhattan distance
+                    intersections.append(tuple(coords))
+                else:
+                    # for steps distance
+                    pre_intersection_coords = path_a[idx_a], path_b[idx_b]
+                    path_steps = (idx_a, idx_b)
+                    detailed_intersections.append(
+                        (path_steps, pre_intersection_coords, coords))
 
     if return_manhattan:
         return min([sum([abs(x), abs(y)]) for x, y in intersections])
-
-    # calculate total steps
     else:
+        # calculate total steps
         least_steps = None
 
         for steps, pres, coords in detailed_intersections:
@@ -156,8 +157,8 @@ def test_traverse_wires_2():
 
 
 wire_a, wire_b = wires
-# test_traverse_wires()
-# test_traverse_wires_2()
+test_traverse_wires()
+test_traverse_wires_2()
 
 # Part 1 Time: ~0.17 seconds
 print(traverse_wires(wire_a, wire_b))  # 2180
