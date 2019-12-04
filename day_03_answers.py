@@ -11,64 +11,22 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
     intersections = []  # for manhattan distance]
     detailed_intersections = []  # for steps total
 
-    # check each line segment from wire_a with all segments from wire_b
-    for idx_a in range(0, len(path_a) - 1):
-        line_a = [path_a[idx_a], path_a[idx_a + 1]]
-
-        for idx_b in range(0, len(path_b) - 1):
-            line_b = [path_b[idx_b], path_b[idx_b + 1]]
-
-            exists, coords = check_for_intersection(line_a, line_b)
-
-            if exists:
-                if return_manhattan:
-                    intersections.append(tuple(coords))
-                else:
-                    path_steps = (idx_a, idx_b)
-                    pre_intersection_coords = (path_a[idx_a], path_b[idx_b])
-                    detailed_intersections.append(
-                        (path_steps, pre_intersection_coords, coords))
+    for line_a, line_b, path_steps in segment_generator(path_a, path_b):
+        exists, coords = check_for_intersection(line_a, line_b)
+        if exists:
+            if return_manhattan:
+                # use tuple() for extraction in min(sum()...list-comp) below
+                intersections.append(tuple(coords))
+            else:
+                idx_a, idx_b = path_steps
+                pre_intersection_coords = (path_a[idx_a], path_b[idx_b])
+                detailed_intersections.append(
+                    (path_steps, pre_intersection_coords, coords))
 
     if return_manhattan:
         return min([sum([abs(x), abs(y)]) for x, y in intersections])
     else:
-        least_steps = None
-
-        # int_coords, int as in abbr for intersection
-        for steps, pres, int_coords in detailed_intersections:
-            step_a, step_b = steps  # direction-steps up to intersection
-            pre_a, pre_b = pres  # coordinates before intersection
-
-            wire_a_steps = count_steps(wire_a, step_a, pre_a, int_coords)
-            wire_b_steps = count_steps(wire_b, step_b, pre_b, int_coords)
-
-            total_steps = wire_a_steps + wire_b_steps
-
-            if least_steps is None:
-                least_steps = total_steps
-            else:
-                least_steps = min(least_steps, total_steps)
-
-        return least_steps
-
-
-def count_steps(wire, steps, pre_coords, int_coords):
-    total = 0
-
-    # add the integer values from the wire-directions
-    for idx in range(0, steps):
-        direction = wire[idx]
-        total += int(direction[1:])
-
-    x1 = pre_coords[0]
-    y1 = pre_coords[1]
-    x2 = int_coords[0]
-    y2 = int_coords[1]
-
-    # add the difference between the pre-intersection coords and
-    #   intersection coords
-    total += (max(x1, x2) - min(x1, x2)) + (max(y1, y2) - min(y1, y2))
-    return total
+        return find_least_steps(detailed_intersections, wire_a, wire_b)
 
 
 def extract_path_from_wire(wire, origin=[0, 0]):
@@ -93,6 +51,17 @@ def get_next_coords(coords, direction):
 
     next_coords[change_pos] = next_coords[change_pos] + (distance * multiplier)
     return next_coords
+
+
+def segment_generator(path_a, path_b):
+    for idx_a in range(0, len(path_a) - 1):
+        line_a = [path_a[idx_a], path_a[idx_a + 1]]
+
+        for idx_b in range(0, len(path_b) - 1):
+            line_b = [path_b[idx_b], path_b[idx_b + 1]]
+
+            path_steps = idx_a, idx_b  # used for step counting / non-manhattan
+            yield line_a, line_b, path_steps
 
 
 def check_for_intersection(line_a, line_b):
@@ -140,6 +109,46 @@ def static_pos_and_range(coord_a, coord_b):
     r_end = max(r)
 
     return static_pos, r_start, r_end
+
+
+def find_least_steps(detailed_intersections, wire_a, wire_b):
+    least_steps = None
+
+    # int_coords, int as in abbr for intersection
+    for steps, pres, int_coords in detailed_intersections:
+        step_a, step_b = steps  # direction-steps up to intersection
+        pre_a, pre_b = pres  # coordinates before intersection
+
+        wire_a_steps = count_steps(wire_a, step_a, pre_a, int_coords)
+        wire_b_steps = count_steps(wire_b, step_b, pre_b, int_coords)
+
+        total_steps = wire_a_steps + wire_b_steps
+
+        if least_steps is None:
+            least_steps = total_steps
+        else:
+            least_steps = min(least_steps, total_steps)
+
+    return least_steps
+
+
+def count_steps(wire, steps, pre_coords, int_coords):
+    total = 0
+
+    # add the integer values from the wire-directions
+    for idx in range(0, steps):
+        direction = wire[idx]
+        total += int(direction[1:])
+
+    x1 = pre_coords[0]
+    y1 = pre_coords[1]
+    x2 = int_coords[0]
+    y2 = int_coords[1]
+
+    # add the difference between the pre-intersection coords and
+    #   intersection coords
+    total += (max(x1, x2) - min(x1, x2)) + (max(y1, y2) - min(y1, y2))
+    return total
 
 
 def test_traverse_wires():
