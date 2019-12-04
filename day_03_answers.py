@@ -20,8 +20,10 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
             else:
                 idx_a, idx_b = path_steps
                 pre_intersection_coords = path_a[idx_a], path_b[idx_b]
+
                 detailed_intersections.append(
-                    (path_steps, pre_intersection_coords, coords))
+                    (path_steps, pre_intersection_coords, coords)
+                )
 
     if return_manhattan:
         return min([sum([abs(x), abs(y)]) for x, y in intersections])
@@ -124,10 +126,9 @@ def find_least_steps(detailed_intersections, wire_a, wire_b):
 
         total_steps = wire_a_steps + wire_b_steps
 
-        if least_steps is None:
-            least_steps = total_steps
-        else:
-            least_steps = min(least_steps, total_steps)
+        least_steps = (
+            min(least_steps, total_steps) if least_steps else total_steps
+        )
 
     return least_steps
 
