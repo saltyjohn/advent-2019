@@ -19,7 +19,7 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
                 intersections.append(tuple(coords))
             else:
                 idx_a, idx_b = path_steps
-                pre_intersection_coords = (path_a[idx_a], path_b[idx_b])
+                pre_intersection_coords = path_a[idx_a], path_b[idx_b]
                 detailed_intersections.append(
                     (path_steps, pre_intersection_coords, coords))
 
