@@ -8,27 +8,25 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
     path_a = extract_path_from_wire(wire_a)
     path_b = extract_path_from_wire(wire_b)
 
-    intersections = []  # for manhattan distance
-    detailed_intersections = []  # for steps total
+    # ints, as in abbr for intersections
+    ints = []  # for manhattan distance
+    detailed_ints = []  # for steps total
 
     for line_a, line_b, path_steps in segment_generator(path_a, path_b):
         exists, coords = check_for_intersection(line_a, line_b)
         if exists:
             if return_manhattan:
-                # use tuple() for extraction in min(sum()...list-comp) below
-                intersections.append(tuple(coords))
+                ints.append(tuple(coords))
             else:
                 idx_a, idx_b = path_steps
-                pre_intersection_coords = path_a[idx_a], path_b[idx_b]
+                pre_ints_coords = path_a[idx_a], path_b[idx_b]
 
-                detailed_intersections.append(
-                    (path_steps, pre_intersection_coords, coords)
-                )
+                detailed_ints.append((path_steps, pre_ints_coords, coords))
 
     if return_manhattan:
-        return min([sum([abs(x), abs(y)]) for x, y in intersections])
+        return min([sum([abs(x), abs(y)]) for x, y in ints])
     else:
-        return find_least_steps(detailed_intersections, wire_a, wire_b)
+        return find_min_steps(detailed_ints, wire_a, wire_b)
 
 
 def extract_path_from_wire(wire, origin=[0, 0]):
@@ -47,11 +45,11 @@ def get_next_coords(coords, direction):
     direction, distance = direction[0], int(direction[1:])
 
     # x-axis [0] / y-axis [1]
-    change_pos = 0 if direction in {"R", "L"} else 1
+    update_pos = 0 if direction in {"R", "L"} else 1
     # positive / negative axis movement
     multiplier = 1 if direction in {"U", "R"} else -1
 
-    next_coords[change_pos] = next_coords[change_pos] + (distance * multiplier)
+    next_coords[update_pos] = next_coords[update_pos] + (distance * multiplier)
     return next_coords
 
 
@@ -113,24 +111,22 @@ def static_pos_and_range(coord_a, coord_b):
     return static_pos, r_start, r_end
 
 
-def find_least_steps(detailed_intersections, wire_a, wire_b):
-    least_steps = None
+def find_min_steps(detailed_ints, wire_a, wire_b):
+    min_steps = None
 
     # int_coords, int as in abbr for intersection
-    for steps, pres, int_coords in detailed_intersections:
+    for steps, pres, int_coords in detailed_ints:
         step_a, step_b = steps  # direction-steps up to intersection
         pre_a, pre_b = pres  # coordinates before intersection
 
         wire_a_steps = count_steps(wire_a, step_a, pre_a, int_coords)
         wire_b_steps = count_steps(wire_b, step_b, pre_b, int_coords)
 
-        total_steps = wire_a_steps + wire_b_steps
+        total_step = wire_a_steps + wire_b_steps
 
-        least_steps = (
-            min(least_steps, total_steps) if least_steps else total_steps
-        )
+        min_steps = min(min_steps, total_step) if min_steps else total_step
 
-    return least_steps
+    return min_steps
 
 
 def count_steps(wire, steps, pre_coords, int_coords):
