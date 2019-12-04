@@ -24,11 +24,13 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
                     (path_steps, pre_intersection_coords, coords))
 
     if return_manhattan:
-        # return the min value
-        #   of the sum
-        #   of the absoute value
-        #   of each x, y coordinate
-        #   in the intersections list
+        # return
+        #   the min value
+        #   from the list
+        #   of the sums
+        #   of the absoute values
+        #   of the x, y coordinates
+        #   witin the intersections list
         return min([sum([abs(x), abs(y)]) for x, y in intersections])
     else:
         return find_least_steps(detailed_intersections, wire_a, wire_b)
