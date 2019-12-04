@@ -28,6 +28,7 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
         #   of the sum
         #   of the absoute value
         #   of each x, y coordinate
+        #   in the intersections list
         return min([sum([abs(x), abs(y)]) for x, y in intersections])
     else:
         return find_least_steps(detailed_intersections, wire_a, wire_b)
