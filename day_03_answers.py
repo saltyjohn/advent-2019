@@ -8,7 +8,7 @@ def traverse_wires(wire_a, wire_b, return_manhattan=True):
     path_a = extract_path_from_wire(wire_a)
     path_b = extract_path_from_wire(wire_b)
 
-    intersections = []  # for manhattan distance]
+    intersections = []  # for manhattan distance
     detailed_intersections = []  # for steps total
 
     for line_a, line_b, path_steps in segment_generator(path_a, path_b):
